@@ -10,8 +10,5 @@ if (environment.production) {
 }
 
 bootstrapApplication(PlayerComponent, {
-  providers: [
-    importProvidersFrom(RouterModule.forRoot([])),
-  ]
-})
-.catch(err => console.error(err));
+  providers: [importProvidersFrom(RouterModule.forRoot([]))],
+}).catch((err) => console.error(err));

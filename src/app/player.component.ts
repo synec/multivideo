@@ -5,20 +5,14 @@ import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'mvi-player',
   standalone: true,
-  imports: [
-    CommonModule,
-  ],
+  imports: [CommonModule],
   templateUrl: './player.component.html',
-  styleUrls: ['./player.component.scss']
+  styleUrls: ['./player.component.scss'],
 })
 export class PlayerComponent implements OnInit {
-
-  constructor(
-    private ar: ActivatedRoute,
-  ) { }
+  constructor(private ar: ActivatedRoute) {}
 
   ngOnInit(): void {
-    console.log('this.ar', this.ar);
+    console.warn('this.ar', this.ar);
   }
-
 }
