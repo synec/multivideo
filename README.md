@@ -1,27 +1,23 @@
+[![Angular framework][ng-image]][ng-url]
+[![NodeJS][node-image]][node-url]
+[![NPM Version][npm-image]][npm-url]
 # Multivideo
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.2.2.
+This Angular app allow to stream multiple video at once from an HTTP server.
 
-## Development server
+## Install
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+  * `git clone https://github.com/synec/multivideo.git`
+  * `cd multivideo`
+  * `npm ci`
+  * `npm start`
 
-## Code scaffolding
+  Afterwards app will be accessible at http://localhost:4200
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+[npm-image]: https://img.shields.io/badge/npm-8+-orange
+[npm-url]: https://npmjs.org/package/gts
+[ng-image]: https://img.shields.io/badge/angular-14.2+-brightgreen
+[ng-url]: https://angular.io
+[node-image]: https://img.shields.io/badge/node-16+-yellowgreen
+[node-url]: https://nodejs.org
