@@ -1,1 +1,3 @@
-<p>player works!</p>
+{{ settings$ | async | json }}
+
+<h1 *ngIf="files$ | async as files">{{ files.length }}</h1>

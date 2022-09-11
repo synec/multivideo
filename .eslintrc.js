@@ -33,6 +33,7 @@ module.exports = {
         'no-underscore-dangle': 'off',
         'prettier/prettier': 'warn',
         '@typescript-eslint/lines-between-class-members': 'warn',
+        '@typescript-eslint/no-non-null-assertion': 'off',
         '@typescript-eslint/no-use-before-define': 'off', // <-- We use forwardRef in Angular
         '@angular-eslint/sort-ngmodule-metadata-arrays': 'warn',
         '@angular-eslint/component-selector': [
