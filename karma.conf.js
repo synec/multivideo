@@ -27,7 +27,10 @@ module.exports = function (config) {
     coverageReporter: {
       dir: require('path').join(__dirname, './coverage'),
       subdir: '.',
-      reporters: [{ type: 'lcov' }],
+      reporters: [
+        { type: 'lcov' },
+        { type: 'cobertura', subdir: '.', file: 'cobertura.xml' },
+      ],
     },
     customLaunchers: {
       ChromeHeadlessNoSandbox: {
