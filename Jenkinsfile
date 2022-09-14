@@ -32,6 +32,7 @@ pipeline {
 
         stage("test") {
           steps {
+            sh 'rm -rf coverage/'
             sh 'npm run test'
             cobertura autoUpdateHealth: false, autoUpdateStability: false, coberturaReportFile: 'coverage/cobertura.xml', conditionalCoverageTargets: '70, 0, 0', failUnhealthy: false, failUnstable: false, lineCoverageTargets: '80, 0, 0', maxNumberOfBuilds: 0, methodCoverageTargets: '80, 0, 0', onlyStable: false
           }
