@@ -1,3 +1,51 @@
+@mixin trans {
+  padding: 0.5rem 1rem;
+  background-color: rgba(0, 0, 0, 0.2);
+  color: white;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 :host {
-  display: block;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: 100vh;
+  gap: 0;
+  .video {
+    height: 100vh;
+    position: relative;
+
+    video {
+      object-fit: cover;
+      height: 100%;
+      width: auto;
+
+      &:focus-visible {
+        outline: none;
+        border: 0;
+      }
+    }
+
+    .hud {
+      display: none;
+    }
+    &.selected .hud {
+      display: block;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      @include trans;
+    }
+  }
+
+  h1 {
+    position: absolute;
+    top: 40vh;
+    left: 0;
+    right: 0;
+    @include trans;
+    text-align: center;
+  }
 }

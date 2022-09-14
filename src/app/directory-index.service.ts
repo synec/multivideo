@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { groupBy } from 'lodash-es';
-import { delay, merge, Observable, of, switchMap } from 'rxjs';
+import { catchError, merge, Observable, of, switchMap } from 'rxjs';
 
 export type FILE_LOCATION = {
   url: string;
@@ -27,16 +27,20 @@ export class DirectoryIndexService {
     ignore = IGNORE_PATHS,
     fileExtension = 'mp4',
   ): Observable<FILE_LOCATION[]> {
+    if (!url) {
+      throw new Error('url must be provided');
+    }
     if (url.endsWith('/')) url = url.slice(0, -1);
     return this.http
       .get(url, {
         responseType: 'text',
       })
       .pipe(
-        delay(500),
+        catchError(() => []),
         switchMap((res: string) => {
           const regex = new RegExp('<a href="(.*)">(.*)</a>', 'gi');
           const matches = Array.from<string[]>(res.matchAll(regex));
+
           const entries: FILE_LOCATION[] = matches
             .filter(([, , name]) => !ignore.includes(name))
             .filter(
@@ -52,6 +56,10 @@ export class DirectoryIndexService {
                 url: [url, path].join('/'),
               };
             });
+
+          if (!entries.length) {
+            return [];
+          }
 
           const { directories, files } = groupBy(entries, (entry) =>
             entry.url.endsWith('/') ? 'directories' : 'files',

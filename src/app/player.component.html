@@ -1,3 +1,23 @@
-{{ settings$ | async | json }}
+<ng-container #loading *ngIf="isLoading; else content">
+  <h1 *ngIf="availableFiles">{{ availableFiles.length }}</h1>
+</ng-container>
 
-<h1 *ngIf="files$ | async as files">{{ files.length }}</h1>
+<ng-template #content>
+  <div
+    class="video"
+    *ngFor="let video of videos; let idx = index"
+    [class.selected]="selectedIndex === idx"
+  >
+    <video
+      muted
+      autoplay
+      controls
+      #videoEl
+      [src]="video.src"
+      (loadedmetadata)="onVideoLoadedmetadata(video, videoEl, idx, $event)"
+    ></video>
+    <div class="hud">
+      <div class="title">{{ video.src }}</div>
+    </div>
+  </div>
+</ng-template>
