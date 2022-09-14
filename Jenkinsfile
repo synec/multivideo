@@ -1,9 +1,8 @@
 pipeline {
   agent any
   environment {
-    APP_NAME = 'console-fe'
+    APP_NAME = 'multivideo'
     SCARF_ANALYTICS = 'false'
-    KARMA_PARALLEL_CORES = 4
   }
   tools {
     nodejs 'nodejs 16.x'
@@ -15,9 +14,9 @@ pipeline {
   }
   stages {
     stage("npm") {
-      // when {
-      //   changeset "package-lock.json"
-      // }
+      when {
+        changeset "package-lock.json"
+      }
       steps {
         sh 'npm ci --silent'
       }
