@@ -69,7 +69,7 @@ export class DirectoryIndexService {
             this.parse(`${d.url}`),
           );
 
-          return merge(of(files), ...directories$);
+          return merge(of(files ?? []), ...directories$);
         }),
       );
   }
