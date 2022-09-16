@@ -7,26 +7,9 @@ import {
   Input,
   OnInit,
 } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
-import { difference, isEqual, partialRight, random } from 'lodash-es';
-import {
-  combineLatest,
-  distinctUntilKeyChanged,
-  filter,
-  map,
-  Observable,
-  of,
-  pairwise,
-} from 'rxjs';
-
-import {
-  finalize,
-  first,
-  mergeMap,
-  scan,
-  shareReplay,
-  tap,
-} from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
+import { of } from 'rxjs';
+import { finalize, mergeMap, scan, tap } from 'rxjs/operators';
 import {
   DirectoryIndexService,
   FILE_LOCATION,
@@ -37,11 +20,6 @@ export type SETTINGS = {
   active?: number;
   count: number;
   [key: string]: unknown;
-};
-
-const DEFAULT_SETTINGS: SETTINGS = {
-  active: 0,
-  count: 2,
 };
 
 export type VIDEO = {
@@ -68,13 +46,14 @@ export class PlayerComponent implements OnInit {
   selectedIndex = 0;
 
   availableFiles: FILE_LOCATION[] = [];
+
   playedSources: string[] = [];
 
   videos: VIDEO[] = [];
 
   constructor(
     private ar: ActivatedRoute,
-    private diService: DirectoryIndexService,
+    public readonly diService: DirectoryIndexService,
     private elementRef: ElementRef,
   ) {}
 
@@ -93,42 +72,36 @@ export class PlayerComponent implements OnInit {
         next: (v) => (this.availableFiles = v),
         complete: () => {
           this.videos = new Array(2).fill({}).map((v, i) => ({
-            src: this.randomFile().url,
+            src: this.diService.randomFile(this.availableFiles).url,
           })) as VIDEO[];
         },
       });
   }
 
-  randomFile(files = this.availableFiles): FILE_LOCATION {
-    return files[Math.floor(random(0, files.length - 1))];
-  }
-
-  unplayedFile(): FILE_LOCATION {
+  randomUnplayedFile(): FILE_LOCATION {
     const unplayed = this.availableFiles.filter(
       (o) => !this.playedSources.includes(o.url),
     );
-    return this.randomFile(unplayed);
+    return this.diService.randomFile(unplayed);
   }
 
-  sameDirFile(src: string): FILE_LOCATION {
+  randomSameDirFile(src: string): FILE_LOCATION {
     const path = src
       .substring(this.url.length)
       .split('/')
       .slice(0, -1)
       .join('/');
-    const unplayed = this.availableFiles.filter((o) => o.url.includes(path));
-    return this.randomFile(unplayed);
+    const sameDirFiles = this.availableFiles.filter((o) =>
+      o.url.includes(path),
+    );
+    return this.diService.randomFile(sameDirFiles);
   }
 
-  onVideoLoadedmetadata(
-    video: VIDEO,
-    el: HTMLVideoElement,
-    index: number,
-    event: Event,
-  ) {
+  onVideoLoadedmetadata(video: VIDEO, el: HTMLVideoElement, index: number) {
     video.el = el;
     video.el.muted = true;
     video.el.play();
+    video.index = index;
     this.playedSources.push(video.src!);
   }
 
@@ -143,52 +116,55 @@ export class PlayerComponent implements OnInit {
     }
 
     const selected: VIDEO = this.videos[this.selectedIndex];
+    /* istanbul ignore next */
     const other: VIDEO = this.videos[this.selectedIndex == 0 ? 1 : 0];
 
-    if (!selected.el) return;
+    if (selected.el) {
+      switch (key.toLocaleLowerCase()) {
+        case 'q':
+          selected.el.currentTime = selected.el.currentTime - 10;
+          break;
+        case 'a':
+          selected.el.currentTime = 0;
+          break;
+        case 'w':
+          selected.el.currentTime = Math.floor(selected.el.duration * 0.9);
+          break;
+        case 'e':
+          selected.el.currentTime = selected.el.currentTime + 10;
+          break;
+        case 'v':
+          other.src = selected.src;
+          break;
+        case 'd':
+          other.src = this.randomSameDirFile(selected.el.src).url;
+          break;
+        case 's':
+          selected.el.playbackRate = selected.el.playbackRate === 1 ? 0.24 : 1;
+          break;
+        case 'r':
+          selected.src = this.randomUnplayedFile().url;
+          selected.el.currentTime = 0;
+          break;
+        case 'c':
+          selected.cmode = !selected.cmode;
+          break;
+        case 'm':
+          selected.el.muted = !selected.el.muted;
+          break;
 
-    switch (key.toLocaleLowerCase()) {
-      case 'q':
-        selected.el.currentTime = selected.el.currentTime - 10;
-        break;
-      case 'a':
-        selected.el.currentTime = 0;
-        break;
-      case 'w':
-        selected.el.currentTime = Math.floor(selected.el.duration * 0.9);
-        break;
-      case 'e':
-        selected.el.currentTime = selected.el.currentTime + 10;
-        break;
-      case 'v':
-        other.src = selected.src;
-        break;
-      case 'd':
-        other.src = this.sameDirFile(selected.el.src).url;
-        break;
-      case 's':
-        selected.el.playbackRate = selected.el.playbackRate === 1 ? 0.24 : 1;
-        break;
-      case 'r':
-        selected.src = this.unplayedFile().url;
-        selected.el.currentTime = 0;
-        break;
-      case 'c':
-        selected.cmode = !selected.cmode;
-        break;
-      case 'm':
-        selected.el.muted = !selected.el.muted;
-        break;
-
-      case 'f':
-        if (document.fullscreenElement) {
-          document.exitFullscreen();
-        } else {
-          selected.el.requestFullscreen();
-        }
-        break;
-      default:
-        break;
+        case 'f':
+          /* istanbul ignore next */
+          if (!document.fullscreenElement) {
+            selected.el.requestFullscreen();
+          } else {
+            document.exitFullscreen();
+          }
+          break;
+        /* istanbul ignore next */
+        default:
+          break;
+      }
     }
   }
 }

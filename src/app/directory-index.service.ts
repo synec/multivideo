@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { groupBy } from 'lodash-es';
+import { groupBy, random } from 'lodash-es';
 import { catchError, merge, Observable, of, switchMap } from 'rxjs';
 
 export type FILE_LOCATION = {
@@ -61,16 +61,20 @@ export class DirectoryIndexService {
             return [];
           }
 
-          const { directories, files } = groupBy(entries, (entry) =>
+          const { directories = [], files = [] } = groupBy(entries, (entry) =>
             entry.url.endsWith('/') ? 'directories' : 'files',
           );
 
-          const directories$ = (directories ?? []).map((d) =>
-            this.parse(`${d.url}`),
+          const directories$ = directories.map((d) =>
+            this.parse(`${d.url}`, ignore, fileExtension),
           );
 
-          return merge(of(files ?? []), ...directories$);
+          return merge(of(files), ...directories$);
         }),
       );
+  }
+
+  randomFile(files: FILE_LOCATION[]): FILE_LOCATION {
+    return files[Math.floor(random(0, files.length - 1))];
   }
 }

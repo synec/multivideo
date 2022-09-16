@@ -14,7 +14,7 @@
       controls
       #videoEl
       [src]="video.src"
-      (loadedmetadata)="onVideoLoadedmetadata(video, videoEl, idx, $event)"
+      (loadedmetadata)="onVideoLoadedmetadata(video, videoEl, idx)"
     ></video>
     <div class="hud">
       <div class="title">{{ video.src }}</div>
