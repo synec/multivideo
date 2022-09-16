@@ -15,7 +15,12 @@ pipeline {
   stages {
     stage("npm") {
       when {
-        changeset "package-lock.json"
+        anyOf {
+          changeset "package-lock.json"
+          expression {
+            fileExists("node_modules") == false
+          }
+        }
       }
       steps {
         sh 'npm ci --silent'
