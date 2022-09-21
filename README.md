@@ -1,7 +1,7 @@
 [![Angular framework][ng-image]][ng-url]
 [![NodeJS][node-image]][node-url]
 [![NPM Version][npm-image]][npm-url]
-[![Build Status](https://jenkins.indivirtuell.net/job/synec/job/multivideo/job/main/badge/icon)](https://jenkins.indivirtuell.net/job/synec/job/multivideo/job/main/)
+[![Build Status](https://jenkins.indivirtuell.net/buildStatus/icon?job=synec%2Fmultivideo%2Fmain)](https://jenkins.indivirtuell.net/job/synec/job/multivideo/job/main/)
 
 # Multivideo
 
