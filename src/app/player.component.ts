@@ -94,7 +94,20 @@ export class PlayerComponent implements OnInit {
     const sameDirFiles = this.availableFiles.filter((o) =>
       o.url.includes(path),
     );
-    return this.diService.randomFile(sameDirFiles);
+
+    const playedSameDirFiles = sameDirFiles.filter((o) =>
+      this.playedSources.includes(o.url),
+    );
+
+    if (playedSameDirFiles.length >= sameDirFiles.length) {
+      this.playedSources = this.playedSources.filter((o) => {
+        !o.includes(path);
+      });
+    }
+    const unplayedSameDirFiles = sameDirFiles.filter(
+      (o) => !this.playedSources.includes(o.url),
+    );
+    return this.diService.randomFile(unplayedSameDirFiles);
   }
 
   onVideoLoadedmetadata(video: VIDEO, el: HTMLVideoElement, index: number) {
