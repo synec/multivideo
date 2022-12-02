@@ -18,7 +18,7 @@ Afterwards app will be accessible at http://localhost:4200
 
 [npm-image]: https://img.shields.io/badge/npm-8+-orange
 [npm-url]: https://npmjs.org/package/gts
-[ng-image]: https://img.shields.io/badge/angular-14.2+-brightgreen
+[ng-image]: https://img.shields.io/badge/angular-15.0.2+-brightgreen
 [ng-url]: https://angular.io
 [node-image]: https://img.shields.io/badge/node-16+-yellowgreen
 [node-url]: https://nodejs.org
