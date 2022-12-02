@@ -100,9 +100,7 @@ export class PlayerComponent implements OnInit {
     );
 
     if (playedSameDirFiles.length >= sameDirFiles.length) {
-      this.playedSources = this.playedSources.filter((o) => {
-        !o.includes(path);
-      });
+      this.playedSources = this.playedSources.filter((o) => !o.includes(path));
     }
     const unplayedSameDirFiles = sameDirFiles.filter(
       (o) => !this.playedSources.includes(o.url),
